@@ -9,7 +9,6 @@ class Solution:
         temp = []
         for i in range(m):
             temp = original [n*i:n*i+n]
-            print(temp)
             ans[i] = temp
         
         return ans
