@@ -3,9 +3,7 @@ class Solution:
         
         
         heap = []
-        
-        rows,cols=range(len(points)),range(len(points[0]))
-        
+                
         for i in points:
                 
                 dis = i[0]*i[0] + i[1]*i[1]
