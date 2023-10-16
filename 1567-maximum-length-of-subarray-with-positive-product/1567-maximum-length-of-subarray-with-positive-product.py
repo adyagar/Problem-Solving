@@ -1,36 +1,22 @@
 class Solution:
     def getMaxLen(self, nums: List[int]) -> int:
-        # Initialize variables to keep track of the number of negatives, 
-        # the position of the first negative, the position of the last negative, 
-        # and the maximum length found so far.
-        num_negatives, first_negative, last_negative, max_len = 0, -1, -1, 0
+        positive, negative, ans = 0,0,0
 
-        # The `left` pointer marks the start of the current subarray.
-        left = 0
-
-        for right in range(len(nums)):
-            # If the current number is negative, we update our tracking variables.
-            if nums[right] < 0:
-                num_negatives += 1
-                if first_negative == -1:
-                    first_negative = right
-                last_negative = right
-
-            # If we find a zero, we can't use this subarray (product would be zero).
-            # We reset all tracking variables and move the `left` pointer past the zero.
-            if nums[right] == 0:
-                num_negatives, first_negative, last_negative = 0, -1, -1
-                left = right + 1
+        for num in nums:
+            if num == 0:
+                positive, negative = 0,0
+            elif num > 0:
+                positive +=1
+                # negative zero means we have not seen negative yet - it means later on if we get another negative no then it wont
+                # be maximum so no need to track length. but if we have seen negative now(negative is not 0) then we need to keep track of negative
+                #  because later on if it we see another negative, there is chance it can be positive and max product
+                negative = 0 if negative == 0 else negative + 1
             else:
-                # If the current subarray has an even number of negatives, the product is positive.
-                if num_negatives % 2 == 0:
-                    max_len = max(max_len, right - left + 1)
-                else:
-                    # If there's an odd number of negatives, the product is negative.
-                    # To get the longest subarray with a positive product, we have two choices:
-                    # 1. Exclude the first negative number.
-                    # 2. Exclude the last negative number.
-                    # We calculate the lengths for both options and update `max_len` accordingly.
-                    max_len = max(max_len, right - first_negative, last_negative - left)
+                positive, negative = 0 if negative == 0 else negative + 1, positive + 1
 
-        return max_len
+            # max of positive because with all +ve -ve nums and its products, what was max length we ended up in 
+            # pos value..even after even no of -ve values..we swapped and ended up in positive value..that max is capture
+            # in pos value
+            ans = max(ans, positive)
+
+        return ans
